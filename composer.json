@@ -1,0 +1,21 @@
+{
+    "name": "data/verify",
+    "description": "verify data",
+    "keywords": ["data", "verify"],
+    "homepage": "https://github.com/yooshang/verify",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yoo",
+            "email": "flj10@163.com",
+            "homepage": "http://www.yooshang.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+    },
+    "autoload": {
+        "psr-4": {"Data\\": "src/Data"}
+    }
+}

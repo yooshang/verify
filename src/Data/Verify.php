@@ -35,8 +35,8 @@ class Verify
      * @example
      *   Data\Verify::verify($_GET, 'page', DATA\TYPE::INT, 'default=1,min=1,max=10,require', '请输入page参数')
      *   Data\Verify::verify($_GET, 'page', DATA\TYPE::INT, function ($page) {
-             return max(1, $page);
-         });
+     *       return max(1, $page);
+     *   });
      *   Data\Verify::verify($_GET, 'phone', DATA\TYPE::STRING, 'regex=/^18\d{9}$/');
      */
     public static function verify($datas, $key, $type = TYPE::STRING, $paras = [], $error = [])

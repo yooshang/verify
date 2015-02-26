@@ -33,13 +33,13 @@ class Verify
      *        max: 最大值
      * @params {Mix|Array|String} $error 出错后的提示内容
      * @example
-     *   Data\Verify::verify($_GET, 'page', DATA\TYPE::INT, 'default=1,min=1,max=10,require', '请输入page参数')
-     *   Data\Verify::verify($_GET, 'page', DATA\TYPE::INT, function ($page) {
+     *   Data\Verify::verify($_GET, 'page', Data\Type::INT, 'default=1,min=1,max=10,require', '请输入page参数')
+     *   Data\Verify::verify($_GET, 'page', Data\Type::INT, function ($page) {
      *       return max(1, $page);
      *   });
-     *   Data\Verify::verify($_GET, 'phone', DATA\TYPE::STRING, 'regex=/^18\d{9}$/');
+     *   Data\Verify::verify($_GET, 'phone', Data\Type::STRING, 'regex=/^18\d{9}$/');
      */
-    public static function verify($datas, $key, $type = TYPE::STRING, $paras = [], $error = [])
+    public static function verify($datas, $key, $type = Type::STRING, $paras = [], $error = [])
     {
         // 解析参数
         $paras = self::parseParas($paras);
@@ -51,7 +51,7 @@ class Verify
         $value = null;
 
         // 如果是原始类型并且没有设置require, 则默认允许为空
-        if (TYPE::ORIGIN == $type && empty($paras['require'])) {
+        if (Type::ORIGIN == $type && empty($paras['require'])) {
             $paras['empty'] = true;
         }
 
@@ -80,7 +80,7 @@ class Verify
      * 直接验证值
      * require和empty不可共用，require优先级高
      */
-    public static function vv($value, $type = TYPE::STRING, $paras = [], $error = [])
+    public static function vv($value, $type = Type::STRING, $paras = [], $error = [])
     {
         // 解析参数
         $paras = self::parseParas($paras);
@@ -95,7 +95,7 @@ class Verify
         }
 
         // 如果是原始类型并且没有设置require, 则默认允许为空
-        if (TYPE::ORIGIN == $type && empty($paras['require'])) {
+        if (Type::ORIGIN == $type && empty($paras['require'])) {
             $paras['empty'] = true;
         }
 
@@ -264,12 +264,12 @@ class Verify
         }
 
         $defaults = [
-            TYPE::INT => 0,
-            TYPE::FLOAT => 0,
-            TYPE::ARR => [],
-            TYPE::LATITUDE => false,
-            TYPE::LONGITUDE => false,
-            TYPE::JSON => []
+            Type::INT => 0,
+            Type::FLOAT => 0,
+            Type::ARR => [],
+            Type::LATITUDE => false,
+            Type::LONGITUDE => false,
+            Type::JSON => []
         ];
 
         if (isset($defaults[$type])) {
@@ -295,7 +295,7 @@ class Verify
     protected static function _check($value, $type, $paras = [], $error = [])
     {
         // 布尔型false是ok的
-        if ($value === false && $type === TYPE::BOOLEAN) {
+        if ($value === false && $type === Type::BOOLEAN) {
             return $value;
         }
 
@@ -329,55 +329,55 @@ class Verify
     {
         //根据类型进行
         switch ($type) {
-            case TYPE::ORIGIN:
+            case Type::ORIGIN:
                 break;
-            case TYPE::STRING:
+            case Type::STRING:
                 if (is_string($value) || is_numeric($value)) {
                     $value = strval(self::filterString($value));
                 } else {
                     $value = '';
                 }
                 break;
-            case TYPE::BOOLEAN:
+            case Type::BOOLEAN:
                 $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
                 break;
-            case TYPE::INT:
+            case Type::INT:
                 $value = intval($value);
                 break;
-            case TYPE::FLOAT:
+            case Type::FLOAT:
                 $value = floatval($value);
                 break;
-            case TYPE::ARR:
+            case Type::ARR:
                 if (!is_array($value)) {
                     $value = [];
                 }
                 // $value = self::filterString($value);
                 break;
-            case TYPE::HTML:
+            case Type::HTML:
                 $value = self::filterString($value, 1);
                 break;
-            case TYPE::EMAIL:
+            case Type::EMAIL:
                 $value = filter_var($value, FILTER_VALIDATE_EMAIL);
                 break;
-            case TYPE::IP:
+            case Type::IP:
                 $value = filter_var($value, FILTER_VALIDATE_IP);
                 break;
-            case TYPE::URL:
+            case Type::URL:
                 $value = filter_var($value, FILTER_VALIDATE_URL);
                 break;
-            case TYPE::POI:
+            case Type::POI:
                 $value = self::isPoiID($value) ? $value : '';
                 break;
-            case TYPE::PHONE:
+            case Type::PHONE:
                 $value = self::isMobilePhone($value) ? $value : '';
                 break;
-            case TYPE::FN:
+            case Type::FN:
                 $value = $value instanceof \Closure ? $value : null;
                 break;
-            case TYPE::JSONP:
+            case Type::JSONP:
                 $value = is_string($value) ? preg_replace('/[^0-9a-zA-Z_\.\[\]]/', '', self::filterString($value)) : '';
                 break;
-            case TYPE::LATITUDE:
+            case Type::LATITUDE:
                 $value = floatval($value);
 
                 if (abs($value) > 90 || $value == 0) {
@@ -385,7 +385,7 @@ class Verify
                 }
 
                 break;
-            case TYPE::LONGITUDE:
+            case Type::LONGITUDE:
                 $value = floatval($value);
 
                 if (abs($value) > 180 || $value == 0) {
@@ -393,7 +393,7 @@ class Verify
                 }
 
                 break;
-            case TYPE::JSON:
+            case Type::JSON:
                 $value = json_decode($value, true);
                 break;
             default:
@@ -401,7 +401,7 @@ class Verify
                 break;
         }
 
-        if (in_array($type, [TYPE::INT, TYPE::FLOAT]) && !empty($paras)) {
+        if (in_array($type, [Type::INT, Type::FLOAT]) && !empty($paras)) {
             $value = self::_minMax($value, $paras);
         }
 

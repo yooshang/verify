@@ -2,7 +2,7 @@
 
 namespace Data;
 
-final class TYPE
+final class Type
 {
     // 保持原样, 啥也不干
     const ORIGIN = 'origin';

@@ -190,11 +190,17 @@ class VerifyTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * 测试函数型验证器是否正常工作
+     */
     public function testFnVerify()
     {
         $this->assertTrue(D::verify($this->stack, 'fn', DT::FN) instanceof Closure);
     }
 
+    /**
+     * 测试异常抛出后的错误信息是否符合预期
+     */
     public function testVerifyErrorMsg()
     {
         try {
@@ -210,5 +216,56 @@ class VerifyTest extends PHPUnit_Framework_TestCase
         } catch (\Exception $e) {
             $this->assertSame($e->getMessage(), 'wrong2');
         }
+    }
+
+    /**
+     * 测试D::set功能
+     */
+    public function testSet()
+    {
+        $test = ['a' => 2];
+
+        $data = D::set($test, 'b', 3);
+        $this->assertTrue($data['b'] === 3);
+
+        $test = ['a' => 2];
+        $data = D::set($test, 'b.c', 3);
+        $this->assertTrue(D::get($data, 'b.c') === 3);
+
+        $test = ['a' => 2];
+        $data = D::set($test, 'b.4', 3);
+        $this->assertTrue(D::get($data, 'b.4') === 3);
+
+        $test = ['a' => 2];
+        $data = \Data\Verify::set($test, 'b.4', ['c' => 5]);
+        $this->assertTrue(D::get($data, 'b.4.c') === 5);
+    }
+
+    /**
+     * 测试D::get功能
+     */
+    public function testGet()
+    {
+        $this->assertSame(D::get($this->stack, 'float'), 3.3);
+        $this->assertSame(D::get($this->stack, 'array.a'), 1);
+        $this->assertTrue(D::get($this->stack, 'array.a') !== '1');
+        $this->assertSame(D::get($this->stack, 'origin3'), null);
+        $this->assertSame(D::get($this->stack, 'scriptString'), '<script>alert(1);</script><div>2</div>');
+
+        $test = [
+            'a' => [
+                'a1' => 1,
+                'b1' => 3,
+                'c1' => [
+                    'a2' => 4
+                ]
+            ],
+            'b' => [
+                'a1' => 2
+            ]
+        ];
+
+        $this->assertSame(D::get($test, 'a.c1'), ['a2' => 4]);
+        $this->assertSame(D::get($test, '$.a1'), [1, 2]);
     }
 }

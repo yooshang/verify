@@ -483,7 +483,10 @@ class Verify
         return preg_match('/^(18|17|13|14|15)\d{9}$/', $phone) ? true : false;
     }
 
-
+    /**
+     * 获取二维数组某一列
+     * 比如获得了10个结果集，获取10个id
+     */
     public static function getCols($arr, $col)
     {
         if (empty($arr)) {
@@ -500,11 +503,17 @@ class Verify
         return $ret;
     }
 
+    /**
+     * 别名
+     */
     public static function to_hashmap($arr, $key)
     {
         return self::hashMap($arr, $key);
     }
 
+    /**
+     * 转为以$key为下表的map关联数组
+     */
     public static function hashMap($arr, $key)
     {
         $r = [];

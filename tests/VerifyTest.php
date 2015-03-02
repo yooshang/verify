@@ -268,4 +268,46 @@ class VerifyTest extends PHPUnit_Framework_TestCase
         $this->assertSame(D::get($test, 'a.c1'), ['a2' => 4]);
         $this->assertSame(D::get($test, '$.a1'), [1, 2]);
     }
+
+    public function testPipe()
+    {
+        $test = [
+            'a' => [
+                'a1' => 1,
+                'b1' => 3,
+                'c1' => [
+                    'a2' => 4
+                ],
+                'c2' => '',
+                'c3' => 0,
+                'c4' => false,
+                'c5' => null
+            ],
+            'b' => [
+                'a1' => 2
+            ],
+            'c' => 5
+        ];
+
+        $this->assertSame(D::pipe($test, 'c'), 5);
+
+        $this->assertSame(D::pipe($test, 'c.a|a.c100|b.a1'), 2);
+
+        $this->assertSame(D::pipe($test, 'a.c100|a.c1'), ['a2' => 4]);
+        $this->assertSame(D::pipe($test, 'a.c100|a.c1', false), ['a2' => 4]);
+        $this->assertSame(D::pipe($test, ['a.c100', 'a.c1'], false), ['a2' => 4]);
+
+        $this->assertSame(D::pipe($test, 'a.c2|a.c1'), '');
+        $this->assertSame(D::pipe($test, 'a.c2|a.c1', false), ['a2' => 4]);
+        $this->assertSame(D::pipe($test, ['a.c2', 'a.c1'], false), ['a2' => 4]);
+
+        $this->assertSame(D::pipe($test, 'a.c3|a.c1'), 0);
+        $this->assertSame(D::pipe($test, 'a.c3|a.c1', false), ['a2' => 4]);
+
+        $this->assertSame(D::pipe($test, 'a.c4|a.c1'), false);
+        $this->assertSame(D::pipe($test, 'a.c4|a.c1', false), ['a2' => 4]);
+
+        $this->assertSame(D::pipe($test, 'a.c5|a.c1'), ['a2' => 4]);
+        $this->assertSame(D::pipe($test, 'a.c5|a.c1', false), ['a2' => 4]);
+    }
 }

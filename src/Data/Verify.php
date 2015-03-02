@@ -136,10 +136,14 @@ class Verify
     }
 
     /**
-     * 串式获得数据
-     * 只有非null才会停止
+     * 串式冒泡获得数据
+     * 默认在数据源存在key的时候会停在检索，但是如果值就是null的话，仍将继续pipe
+     * @param array $datas 数据源
+     * @param string|array $keys 要获取的key, 例如 'a.b|a.c' 或者 ['a.b', 'a.c']
+     * @param boolean $keyExistReturn key存在则直接返回,default to true, 如果为false的话，会一直pipe到一个非空值
+     * @return mix $value
      */
-    public static function bunch($datas, $keys)
+    public static function pipe($datas, $keys, $keyExistReturn = true)
     {
         if (!is_array($keys)) {
             $keys = explode('|', $keys);
@@ -156,8 +160,20 @@ class Verify
                 continue;
             }
 
+            if (!$keyExistReturn && empty($value)) {
+                continue;
+            }
+
             return $value;
         }
+    }
+
+    /**
+     * pipe方法的历史别名
+     */
+    public static function bunch($datas, $keys)
+    {
+        return self::pipe($datas, $keys);
     }
 
     /**

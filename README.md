@@ -1,21 +1,24 @@
 # verify
 数据验证器
 
-该Tool提供verify验证器验证数据源的数据是否符合预期，并提供多种快速获取或者转换数据的方法，解决工程上不断isset empty等验证数据的烦恼。
+该Tool可方便验证数据源是否符合预期，并提供多种快速获取或者转换数据的方法，解决工程上不断isset empty等验证数据的烦恼。
 例如
 ```
-   if (isset($p['detail']) && isset($p['detail']['primary']) && $p['detail']['primary'] == 'test') {
-      $url = isset($p['detail']['source']['test']['url']) ? $p['detail']['source']['test']['url'] : '';
+   $primary = 'test';
+
+   // 一个不严谨判断，可能造成很多notice，代码冗长且不直观
+   if (isset($p['detail']) && isset($p['detail']['primary']) && $p['detail']['primary'] == $primary) {
+      $url = isset($p['detail']['source'][$primary]['url']) ? $p['detail']['source']['$primary']['url'] : '';
       $p['detail']['url'] = $url;
    } else {
       $p['detail']['url'] = '';
    }
 
    // 以上代码将简化为，没有默认值
-   $p['detail']['url'] = D::get($p, 'detail.source.test.url');
+   $p['detail']['url'] = D::get($p, "detail.source.{$primary}.url");
 
    // 或者，默认值''
-   $p['detail']['url'] = D::verify($p, 'detail.source.test.url');
+   $p['detail']['url'] = D::verify($p, "detail.source.{$primary}.url");
 ```
 
 # 支持校验类型

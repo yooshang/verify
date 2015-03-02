@@ -5,15 +5,15 @@
 例如
 ```
    if (isset($p['detail']) && isset($p['detail']['primary']) && $p['detail']['primary'] == 'test') {
-      $url = isset($p['detail']['source']['test']['url']) ? $p['detail']['source']['test']['url']:'';                                                                                                               
+      $url = isset($p['detail']['source']['test']['url']) ? $p['detail']['source']['test']['url'] : '';
       $p['detail']['url'] = $url;
    } else {
       $p['detail']['url'] = '';
    }
-   
+
    // 以上代码将简化为，没有默认值
    $p['detail']['url'] = D::get($p, 'detail.source.test.url');
-   
+
    // 或者，默认值''
    $p['detail']['url'] = D::verify($p, 'detail.source.test.url');
 ```
@@ -47,7 +47,13 @@ use Data\Type as DT;
 
 * D::verify, 提供各类验证器
 ```
-   D::verify($_GET, 'ip', DT::IP)
+   D::verify($_GET, 'ip', DT::IP);
+   // 支持正则
+   D::verify($_GET, 'input', DT::STRING, 'regex=/^18\d{9}$/');
+   // 支持回调
+   D::verify($_GET, 'input', DT::STRING, function ($value) {
+       return strtolower($value);
+   });
 ```
 * D::get, 提供获取器
 ```

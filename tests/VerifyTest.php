@@ -310,4 +310,36 @@ class VerifyTest extends PHPUnit_Framework_TestCase
         $this->assertSame(D::pipe($test, 'a.c5|a.c1'), ['a2' => 4]);
         $this->assertSame(D::pipe($test, 'a.c5|a.c1', false), ['a2' => 4]);
     }
+
+    public function testUnset()
+    {
+        $test = [
+            'a' => 1,
+            'c' => 5
+        ];
+
+        $this->assertSame(D::remove($test, 'c'), ['a' => 1]);
+        // $test already change
+        $this->assertSame($test, ['a' => 1]);
+        // nonexist key, do nothing
+        $this->assertSame(D::remove($test, 'c.1'), ['a' => 1]);
+    }
+
+    public function testRename()
+    {
+        $test = [
+            'a' => 1,
+            'c' => 5
+        ];
+
+        $this->assertSame(D::rename($test, 'c', 'b'), ['a' => 1, 'b' => 5]);
+        $this->assertSame(D::rename($test, 'b', 'c.d'), ['a' => 1, 'c' => ['d' => 5]]);
+        // b has a value already, do nothing
+        //$this->assertSame(D::rename($test, 'a', 'a.e'), ['a' => 1, 'c' => ['d' => 5]]);
+        $this->assertSame(D::rename($test, 'a', 'c.1.d'), ['c' => ['d' => 5, 1 => ['d' => 1]]]);
+        $test = [
+            'a' => 1
+        ];
+        $this->assertSame(D::rename($test, 'a', 'a.b'), ['a' => ['b' => 1]]);
+    }
 }

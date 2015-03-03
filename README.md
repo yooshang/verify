@@ -68,6 +68,11 @@ use Data\Type as DT;
    D::pipe($_GET, 'name|username'), 如果$_GET没有name这个key，将取 $_GET['username']
 ```
 
+* D::rename, 提供替换key的方法
+```
+   D::rename($_GET, 'name', 'username'), 将把name这个key替换为username
+```
+
 * D::getCols, 提供列获取器
 
 * D::hashMap, 根据某列转化为关联数组

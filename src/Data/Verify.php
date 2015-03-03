@@ -194,10 +194,55 @@ class Verify
 
         $mark = &$data;
         foreach ($keys as $key) {
+            if (!is_array($mark)) {
+                $mark = [];
+            }
+
             $mark = &$mark[$key];
         }
 
         $mark = $value;
+
+        return $data;
+    }
+
+    public static function rename(&$data, $key, $target, $unset = true)
+    {
+        $keys = explode('.', $key);
+
+        if (empty($keys) || is_null(self::get($data, $key))) {
+            return $data;
+        }
+
+        self::set($data, $target, self::get($data, $key));
+        if (strpos($target, $key) === false) {
+            self::remove($data, $key);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Just remove $key from $data, @notice: it's a reference method
+     */
+    public static function remove(&$data, $key)
+    {
+        $keys = explode('.', $key);
+
+        if (empty($keys) || is_null(self::get($data, $key))) {
+            return $data;
+        }
+
+        $count = count($keys);
+        $mark = &$data;
+        foreach ($keys as $i => $k) {
+            if ($i == $count - 1) {
+                unset($mark[$k]);
+                break;
+            }
+
+            $mark = &$mark[$k];
+        }
 
         return $data;
     }

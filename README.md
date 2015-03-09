@@ -1,24 +1,24 @@
 # verify
 数据验证器
 
-该Tool可方便验证数据源是否符合预期，并提供多种快速获取或者转换数据的方法，解决工程上不断isset empty等验证数据的烦恼。
+该Tool可方便验证数据源是否符合预期，并提供多种快速获取或者转换数据的方法，解决工程上不断isset empty等验证数据的麻烦
 例如
 ```
-   $primary = 'test';
+$primary = 'test';
 
-   // 一个不严谨判断，可能造成很多notice，代码冗长且不直观
-   if (isset($p['detail']) && isset($p['detail']['primary']) && $p['detail']['primary'] == $primary) {
-      $url = isset($p['detail']['source'][$primary]['url']) ? $p['detail']['source']['$primary']['url'] : '';
-      $p['detail']['url'] = $url;
-   } else {
-      $p['detail']['url'] = '';
-   }
+// 不严谨的判断会造成很多notice，代码冗长且不直观
+if (isset($p['detail']) && isset($p['detail']['primary']) && $p['detail']['primary'] == $primary) {
+    $url = isset($p['detail']['source'][$primary]['url']) ? $p['detail']['source']['$primary']['url'] : '';
+    $p['detail']['url'] = $url;
+} else {
+    $p['detail']['url'] = '';
+}
 
-   // 以上代码将简化为，没有默认值
-   $p['detail']['url'] = D::get($p, "detail.source.{$primary}.url");
+// 以上代码将简化
+$p['detail']['url'] = D::get($p, "detail.source.{$primary}.url");
 
-   // 或者，默认值''
-   $p['detail']['url'] = D::verify($p, "detail.source.{$primary}.url");
+// 默认值为''的话，使用verify方法，默认DT::STRING类型
+$p['detail']['url'] = D::verify($p, "detail.source.{$primary}.url");
 ```
 
 # 支持校验类型
@@ -42,7 +42,7 @@
 
 ## Usage:
 
-个人习惯的缩写
+常用别名
 ```
 use Data\Verify as D;
 use Data\Type as DT;

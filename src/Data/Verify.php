@@ -377,7 +377,12 @@ class Verify
         }
 
         if (empty($value)) {
-            return self::_doError($type, $paras, $error);
+            $value = self::_doError($type, $paras, $error);
+        }
+
+        // logic for min and max
+        if (in_array($type, [Type::INT, Type::FLOAT]) && !empty($paras)) {
+            $value = self::_minMax($value, $paras);
         }
 
         return $value;
@@ -460,10 +465,6 @@ class Verify
             default:
                 $value = '';
                 break;
-        }
-
-        if (in_array($type, [Type::INT, Type::FLOAT]) && !empty($paras)) {
-            $value = self::_minMax($value, $paras);
         }
 
         return $value;

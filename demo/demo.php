@@ -10,9 +10,9 @@ $demo = [
     'b' => [
         'c' => '010',
         'd' => [
-            't1','t2','t3','t4', [
-                'e' => 181
-            ]
+            ['id' => 1],
+            ['id' => 2],
+            ['id' => 181]
         ]
     ]
 ];
@@ -23,14 +23,24 @@ var_dump(D::get($demo, 'a'));
 // '010'
 var_dump(D::get($demo, 'b.c'));
 
-// 't3'
-var_dump(D::get($demo, 'b.d.2'));
+// '1'
+var_dump(D::get($demo, 'b.d.0.id'));
 
 // NULL
 var_dump(D::get($demo, 'CanNotFind'));
 
 // '010'
 var_dump(D::pipe($demo, 'CanNotFind|a.c|b.c'));
+
+// [1, 2, 181]
+var_dump(D::getCols(D::get($demo, 'b.d'), 'id'));
+
+// [
+//       1 => ['id' => 1],
+//       2 => ['id' => 2],
+//     181 => ['id' => 181],
+// ]
+var_dump(D::hashMap(D::get($demo, 'b.d'), 'id'));
 
 // 5
 var_dump(D::verify($demo, 'page', DT::INT, 'default=5,min=1,max=10'));
@@ -47,7 +57,7 @@ var_dump(D::verify($demo, 'b.c', DT::STRING, function ($value) {
     )
 );
 
-// ''
+// '010' doesn't match this pattern, so give default string(0) back
 var_dump(D::verify($demo, 'b.c', DT::STRING, 'regex=/^\d{4}$/'));
 
 // require('login').wrongId()

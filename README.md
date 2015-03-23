@@ -8,7 +8,7 @@ $primary = 'test';
 
 // 不严谨的判断会造成很多notice，代码冗长且不直观
 if (isset($p['detail']) && isset($p['detail']['primary']) && $p['detail']['primary'] == $primary) {
-    $url = isset($p['detail']['source'][$primary]['url']) ? $p['detail']['source']['$primary']['url'] : '';
+    $url = isset($p['detail']['source'][$primary]['url']) ? $p['detail']['source'][$primary]['url'] : '';
     $p['detail']['url'] = $url;
 } else {
     $p['detail']['url'] = '';
@@ -39,6 +39,7 @@ $p['detail']['url'] = D::verify($p, "detail.source.{$primary}.url");
 * poi 16位数字+字母的字符串
 * function 回调函数
 * origin 保持原样
+* enum 枚举型
 
 ## Usage:
 

@@ -333,13 +333,11 @@ class Verify
             Type::JSON => []
         ];
 
-        if (isset($defaults[$type])) {
+        if (is_string($type) && isset($defaults[$type])) {
             return $defaults[$type];
-        } else {
-            return '';
         }
 
-        return null;
+        return '';
     }
 
     /**
@@ -462,6 +460,9 @@ class Verify
             case Type::JSON:
                 $value = json_decode($value, true);
                 break;
+            case Type::ENUM:
+               $value = self::doEnum($value, $paras);
+               break;
             default:
                 $value = '';
                 break;
@@ -587,5 +588,20 @@ class Verify
         }
 
         return $r;
+    }
+
+    /**
+     * 枚举类型处理
+     * 如果存在于候选项中，则返回value
+     */
+    private static function doEnum($value, $paras = [])
+    {
+        $enums = isset($paras['enums']) ? $paras['enums'] : [];
+
+        if (in_array($value, $enums)) {
+            return $value;
+        }
+
+        return NULL;
     }
 }

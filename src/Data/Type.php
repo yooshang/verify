@@ -41,4 +41,6 @@ final class Type
     const LONGITUDE = 'longitude';
 
     const JSON = 'json';
+
+    const ENUM = 'enum';
 }

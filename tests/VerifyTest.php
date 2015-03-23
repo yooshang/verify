@@ -149,7 +149,10 @@ class VerifyTest extends PHPUnit_Framework_TestCase
             ['int', DT::INT, -1, 'max=-1'],
             ['float', DT::INT, 1, ['max' => 1]],
             ['int', DT::STRING, '1', 'max=-1'],
-            ['nonExist', DT::INT, 5, 'default=5,min=1,max=10']
+            ['nonExist', DT::INT, 5, 'default=5,min=1,max=10'],
+            ['string', DT::ENUM, '', ['enums' => ['int', 'float']]],
+            // default must in enums
+            ['string', DT::ENUM, false, ['enums' => ['int', 'float', false], 'default' => false]]
         ];
     }
 

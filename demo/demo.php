@@ -14,7 +14,7 @@ $demo = [
             ['id' => 2],
             ['id' => 181]
         ]
-    ]
+    ],
 ];
 
 // 1
@@ -56,6 +56,9 @@ var_dump(D::verify($demo, 'b.c', DT::STRING, function ($value) {
         }
     )
 );
+
+// 1
+var_dump(D::verify($demo, 'a', DT::ENUM, ['enums' => [1, 5, 10], 'default' => 10]));
 
 // '010' doesn't match this pattern, so give default string(0) back
 var_dump(D::verify($demo, 'b.c', DT::STRING, 'regex=/^\d{4}$/'));

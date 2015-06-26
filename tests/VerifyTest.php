@@ -12,6 +12,7 @@ class VerifyTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->stack = [
+            '0' => '0',
             'string' => 'string',
             'empty' => '',
             'rightSpace' => 'string ',
@@ -77,6 +78,7 @@ class VerifyTest extends PHPUnit_Framework_TestCase
     public function simpleVerifyProvider()
     {
         return [
+            ['0', DT::STRING, '0'],
             ['string', DT::STRING, 'string'],
             ['empty', DT::STRING, ''],
             ['rightSpace', DT::STRING, 'string'],

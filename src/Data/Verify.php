@@ -374,7 +374,8 @@ class Verify
             }
         }
 
-        if (empty($value)) {
+        // fix '0' for string
+        if (empty($value) && $value !== '0') {
             $value = self::_doError($type, $paras, $error);
         }
 

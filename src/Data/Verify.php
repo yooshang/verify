@@ -110,14 +110,13 @@ class Verify
      * 路径取值
      * @notice 没有必要处理 $key === '$' 的情况 - -
      */
-    public static function get($datas, $key)
+    public static function get($datas, $key, $default = null)
     {
-        $keys = explode('.', $key);
-
-        if (count($keys) === 1) {
-            return isset($datas[$key]) ? $datas[$key] : null;
+        if (false === strpos($key, '.')) {
+            return isset($datas[$key]) ? $datas[$key] : $default;
         }
 
+        $keys = explode('.', $key);
         $index = $datas;
         // 如果不包含通配符
         if (strpos($key, self::PATTERN_SYMBOL) === false) {
@@ -125,7 +124,7 @@ class Verify
                 if (isset($index[$k])) {
                     $index = $index[$k];
                 } else {
-                    return null;
+                    return $default;
                 }
             }
 
@@ -550,6 +549,7 @@ class Verify
     /**
      * 获取二维数组某一列
      * 比如获得了10个结果集，获取10个id
+     * array_column, http://php.net/manual/zh/function.array-column.php >= 5.5.0
      */
     public static function getCols($arr, $col)
     {
@@ -557,38 +557,20 @@ class Verify
             return [];
         }
 
-        $ret = [];
-        foreach ($arr as $row) {
-            if (isset($row[$col])) {
-                $ret[] = $row[$col];
-            }
-        }
-
-        return $ret;
-    }
-
-    /**
-     * 别名
-     */
-    public static function to_hashmap($arr, $key)
-    {
-        return self::hashMap($arr, $key);
+        return array_column($arr, $col);
     }
 
     /**
      * 转为以$key为下表的map关联数组
+     * @param string $col 如果存在col，则表示提取$arr中$key => $col 的键值对
      */
-    public static function hashMap($arr, $key)
+    public static function hashMap($arr, $key, $col = '')
     {
-        $r = [];
-
-        foreach ($arr as $k => $v) {
-            if (isset($v[$key])) {
-                $r[$v[$key]] = $v;
-            }
+        if ($col) {
+            return array_column($arr, $col, $key);
+        } else {
+            return array_column($arr, null, $key);
         }
-
-        return $r;
     }
 
     /**

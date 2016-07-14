@@ -273,6 +273,9 @@ class VerifyTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(D::get($test, 'a.c1'), ['a2' => 4]);
         $this->assertSame(D::get($test, '$.a1'), [1, 2]);
+
+        # default
+        $this->assertSame(D::get($this->stack, 'nonExist', 3), 3);
     }
 
     public function testPipe()
@@ -347,5 +350,48 @@ class VerifyTest extends PHPUnit_Framework_TestCase
             'a' => 1
         ];
         $this->assertSame(D::rename($test, 'a', 'a.b'), ['a' => ['b' => 1]]);
+    }
+
+    public function testGetCols()
+    {
+        $test = [
+            [
+                'a' => 'a1',
+                'b' => 'b1'
+            ],
+            [
+                'a' => 'a2',
+                'b' => 'b2'
+            ],
+            [
+                'a' => 'a3'
+            ]
+        ];
+        $this->assertSame(D::getCols($test, 'a'), ['a1', 'a2', 'a3']);
+        $this->assertSame(D::getCols($test, 'b'), ['b1', 'b2']);
+    }
+
+    public function testHashmap()
+    {
+        $test = [
+            [
+                'a' => 'a1',
+                'b' => 'b1'
+            ],
+            [
+                'a' => 'a2',
+                'b' => 'b2'
+            ],
+            [
+                'a' => 'a3'
+            ],
+            [
+                'a' => 'a4'
+            ]
+        ];
+        $this->assertSame(D::get(D::hashMap($test, 'a'), 'a1'), ['a' => 'a1', 'b' => 'b1']);
+        $this->assertSame(D::hashMap($test, 'a', 'b'), ['a1' => 'b1', 'a2' => 'b2']);
+        $this->assertSame(D::hashMap($test, 'b', 'a'), ['b1' => 'a1', 'b2' => 'a2', 0 => 'a3', 1 => 'a4']);
+        $this->assertSame(D::hashMap($test, 'a', 'notExist'), []);
     }
 }

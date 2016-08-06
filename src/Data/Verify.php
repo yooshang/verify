@@ -139,17 +139,18 @@ class Verify
      * 默认在数据源存在key的时候会停在检索，但是如果值就是null的话，仍将继续pipe
      * @param array $datas 数据源
      * @param string|array $keys 要获取的key, 例如 'a.b|a.c' 或者 ['a.b', 'a.c']
+     * @param mix $default 默认值
      * @param boolean $keyExistReturn key存在则直接返回,default to true, 如果为false的话，会一直pipe到一个非空值
      * @return mix $value
      */
-    public static function pipe($datas, $keys, $keyExistReturn = true)
+    public static function pipe($datas, $keys, $default = null, $keyExistReturn = true)
     {
         if (!is_array($keys)) {
             $keys = explode('|', $keys);
         }
 
         if (empty($keys)) {
-            return null;
+            return $default;
         }
 
         foreach ($keys as $key) {
@@ -165,6 +166,8 @@ class Verify
 
             return $value;
         }
+
+        return $default;
     }
 
     /**
